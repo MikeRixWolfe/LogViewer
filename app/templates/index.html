@@ -5,11 +5,17 @@
 
 {% block content %}
     <div class="row">
-        {% for msg in msgs %}
+        {% if logs|length == 0 %}
         <div class="col-12">
-            line
+            No lines today :(
+        </div>
+        {% else %}
+        {% for line in logs %}
+        <div class="col-12">
+            {{ line }}
         </div>
         {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}
 
