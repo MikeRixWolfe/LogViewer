@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>NoXD Log Viewer</title>
+  </head>
+  <body>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    {% block navbar %}{% endblock %}
+    <div class="content">
+	{% for category, message in get_flashed_messages(with_categories=true) %}
+		<div class="alert alert-{{category}} alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			{{ message }}
+		</div>
+	{% endfor %}
+    {% block content %}{% endblock %}
+    </div>
+    {% block footer %}{% endblock %}
+  </body>
+</html>

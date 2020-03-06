@@ -1,0 +1,118 @@
+body {
+    max-width: 2000px;
+    margin: auto;
+    background: #1d1d1d;
+    color: white;
+}
+
+h1 {
+    margin: 10px 0px 10px 0px;
+    line-height: 1.27778;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+img {
+    visibility: hidden;
+}
+
+a {
+    font-style: normal;
+    font-weight: bold;
+}
+
+.text-center {
+    text-align: center!important;
+    padding-top: 80px;
+}
+
+.landscape-thumbnail {
+    width: auto;
+    height: 200px;
+    visibility: visible;
+	position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+}
+
+.portrait-thumbnail {
+    width: 100%;
+    height: auto;
+    visibility: visible;
+	position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+}
+
+.landscape {
+    width: auto;
+    height: 200px;
+    visibility: visible;
+}
+
+.portrait {
+    width: 100%;
+    height: auto;
+    visibility: visible;
+}
+
+.content {
+    margin: auto;
+    width: 90%;
+    max-width:1200px
+}
+
+.gallery-child {
+    background-color: rgb(39, 39, 39);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2);
+    margin: 10px 0;
+    height: 240px;
+}
+
+.gallery-child p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gallery-image {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-container {
+    background-color: rgb(39, 39, 39);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2);
+    margin: 10px 0 50px 0;
+}
+
+.description {
+    padding: 10px 15px 10px 15px;
+}
+
+.navbar {
+    background-color: rgb(39, 39, 39);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2);
+
+}
+
+.navbar-text {
+    padding-right: .5rem;
+    padding-left: .5rem;
+}
+
+.navbar-text a {
+    color: rgba(255,255,255,.5) !important;
+}
+
+.navbar-text a:hover {
+    color: rgba(255,255,255,.75) !important;
+    text-decoration: none;
+}
