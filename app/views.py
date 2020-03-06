@@ -18,6 +18,7 @@ bp = Blueprint('logs', __name__, url_prefix='/logviewer')
 def index(chan, date, time):
     formats = {
         'PRIVMSG': u'{time} < {nick}> {msg}',
+        'ACTION': u'{time} {msg}',
         'PART': u'{time} -!- {nick} [{user}] has left {chan} [{msg}]',
         'JOIN': u'{time} -!- {nick} [{user}] has joined {chan}',
         'MODE': u'{time} -!- mode/{chan} [{msg}] by {nick}',
