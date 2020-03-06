@@ -22,7 +22,7 @@
 {% block footer %}
    <script>
         $(window).on('load', function () {
-			if ('{{ts}}' !== 'undefined') {
+			if ('{{ts}}' !== 'None') {
 				$('html, body').animate({ scrollTop: $($('div:contains("{{ts}}")')[2]).offset().top - $(window).height()/2}, 'fast');
                 
                 var fspeed = 200;

@@ -2,7 +2,6 @@ from datetime import datetime
 from flask import abort, render_template, Blueprint, Markup
 from flask_login import login_required
 from re import sub, IGNORECASE
-from urllib import unquote
 
 from app import app, db
 from app.models import Log
@@ -11,10 +10,12 @@ from app.models import Log
 bp = Blueprint('logs', __name__, url_prefix='/logviewer')
 
 
-@bp.route('/', defaults={'chan': None, 'dt': None}, methods=['GET'])
-@bp.route('/<chan>/<dt>', methods=['GET'])
+@bp.route('/', defaults={'chan': None, 'date': None, 'time': None}, methods=['GET'])
+@bp.route('/<chan>', defaults={'date': None, 'time': None}, methods=['GET'])
+@bp.route('/<chan>/<date>', defaults={'time': None}, methods=['GET'])
+@bp.route('/<chan>/<date>/<time>', methods=['GET'])
 @login_required
-def index(chan, dt):
+def index(chan, date, time):
     formats = {
         'PRIVMSG': u'{time} < {nick}> {msg}',
         'PART': u'{time} -!- {nick} [{user}] has left {chan} [{msg}]',
@@ -26,12 +27,12 @@ def index(chan, dt):
         'NICK': u'{time} -!- {nick} [{user}] is now known as {msg}',
     }
 
-    if chan == dt:
-        return render_template('index.html', logs=[], ts='undefined')
+    if not chan or not date:
+        return render_template('index.html', logs=[], ts=None)
 
     try:
-        date = datetime.strptime(unquote(dt), "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d")
-        time = datetime.strptime(unquote(dt), "%Y-%m-%d %H:%M:%S").strftime("%H:%M:%S")
+        if date: datetime.strptime(date, "%Y-%m-%d")
+        if time: datetime.strptime(time, "%H:%M:%S")
 
         logs = db.session.query(Log) \
             .filter(db.text("logfts MATCH 'chan:\"{}\" AND time:\"{}\"'".format(chan, date))) \
