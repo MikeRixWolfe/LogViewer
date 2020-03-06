@@ -20,4 +20,16 @@
 {% endblock %}
 
 {% block footer %}
+   <script>
+        $(window).on('load', function () {
+			if ('{{ts}}' !== 'undefined') {
+				$('html, body').animate({ scrollTop: $($('div:contains("{{ts}}")')[2]).offset().top - $(window).height()/2}, 'fast');
+                
+                var fspeed = 200;
+                for (i = 0; i <= 3; i++) {
+                    $($('div:contains("{{ts}}")')[2]).fadeOut(fspeed).fadeIn(fspeed);
+                  }
+			}
+        });
+    </script> 
 {% endblock %}
