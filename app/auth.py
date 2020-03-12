@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, Blueprint
+from flask import render_template, flash, redirect, request, url_for, Blueprint
 from flask_login import current_user, login_required, login_user, logout_user
 
 from app import app, db, login
@@ -30,7 +30,7 @@ def login():
 
         login_user(user, remember=form.remember_me.data)
         flash('You have successfully logged in!', 'success')
-        return redirect(url_for('logs.index'))
+        return redirect(request.args.get("next") or url_for('logs.index'))
 
     #if form.errors:
     #    if isinstance(form.errors, dict):
