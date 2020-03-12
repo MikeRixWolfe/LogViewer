@@ -41,6 +41,7 @@ def index(chan, date, time):
 
         for line in logs:
             line.time = line.time[11:]
+            line.msg = str(Markup.escape(line.msg.encode('ascii', 'ignore')))
             line.msg = sub(r'(https?:\/\/(?:www\.)?([^: \/]+\.[^: \/]+)(?::\d+)?\/?[^\" ]*)',
                            r'<a href="\1">\1</a>', line.msg, flags=IGNORECASE)
             line.msg = line.msg.encode('ascii', 'ignore')
