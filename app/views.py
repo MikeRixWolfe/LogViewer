@@ -44,7 +44,6 @@ def index(chan, date, time):
             line.msg = str(Markup.escape(line.msg.encode('ascii', 'ignore')))
             line.msg = sub(r'(https?:\/\/(?:www\.)?([^: \/]+\.[^: \/]+)(?::\d+)?\/?[^\" ]*)',
                            r'<a href="\1">\1</a>', line.msg, flags=IGNORECASE)
-            line.msg = line.msg.encode('ascii', 'ignore')
 
         logs = [Markup(formats[line.action].format(**line.to_dict()))
                 for line in logs if line.action not in ['PING', 'NOTICE']]
