@@ -18,6 +18,7 @@ bp = Blueprint('logs', __name__, url_prefix='/logviewer')
 def index(chan, date, time):
     formats = {
         'PRIVMSG': u'{time} < {nick}> {msg}',
+        #'PRIVMSG': u'{time} < <span style="color: {color}">{nick}</span>> {msg}',
         'ACTION': u'{time} {msg}',
         'PART': u'{time} -!- {nick} [{user}] has left {chan} [{msg}]',
         'JOIN': u'{time} -!- {nick} [{user}] has joined {chan}',
@@ -27,6 +28,11 @@ def index(chan, date, time):
         'QUIT': u'{time} -!- {nick} has quit IRC [{msg}]',
         'NICK': u'{time} -!- {nick} [{user}] is now known as {msg}',
     }
+
+    colors = ['rgb(0,0,127)', 'rgb(0,147,0)', 'rgb(255,0,0)', 'rgb(127,0,0)',
+              'rgb(156,0,156)', 'rgb(252,127,0)', 'rgb(255,255,0)', 'rgb(0,252,0)',
+              'rgb(0,147,147)', 'rgb(0,255,255)', 'rgb(0,0,252)', 'rgb(255,0,255)',
+              'rgb(127,127,127)']
 
     if not chan or not date:
         return render_template('index.html', logs=[], ts=None)
@@ -44,6 +50,7 @@ def index(chan, date, time):
             line.msg = str(Markup.escape(line.msg.encode('ascii', 'ignore')))
             line.msg = sub(r'(https?:\/\/(?:www\.)?([^: \/]+\.[^: \/]+)(?::\d+)?\/?[^\" ]*)',
                            r'<a href="\1">\1</a>', line.msg, flags=IGNORECASE)
+            line.color = colors[sum(ord(c) for c in line.nick) % 11]
 
         logs = [Markup(formats[line.action].format(**line.to_dict()))
                 for line in logs if line.action not in ['PING', 'NOTICE']]
