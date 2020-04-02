@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import abort, render_template, Blueprint, Markup
 from flask_login import login_required
-from re import sub, IGNORECASE
+from re import compile, sub, IGNORECASE
 
 from app import app, db
 from app.models import Log
@@ -9,6 +9,8 @@ from app.util import color_hash
 
 
 bp = Blueprint('logs', __name__, url_prefix='/logviewer')
+
+url_re = compile(r'(https?:\/\/(?:www\.)?([^: \/]+\.[^: \/]+)(?::\d+)?\/?[^\" ]*)', IGNORECASE)
 
 
 @bp.route('/search', methods=['GET'])
@@ -47,14 +49,13 @@ def index(chan, date, time):
         if time: datetime.strptime(time, "%H:%M:%S")
 
         logs = db.session.query(Log) \
-            .filter(db.text("logfts MATCH 'chan:\"{}\" AND time:\"{}\"'".format(chan, date))) \
+            .filter(db.text("logfts MATCH 'chan:\"#{}\" AND time:\"{}\"'".format(chan, date))) \
             .all()
 
         for line in logs:
             line.time = line.time[11:]
             line.msg = str(Markup.escape(line.msg.encode('ascii', 'ignore')))
-            line.msg = sub(r'(https?:\/\/(?:www\.)?([^: \/]+\.[^: \/]+)(?::\d+)?\/?[^\" ]*)',
-                           r'<a href="\1">\1</a>', line.msg, flags=IGNORECASE)
+            line.msg = url_re.sub(r'<a href="\1">\1</a>', line.msg)
 
         logs = [Markup(formats[line.action].format(color=color_hash(line.nick),
             **line.to_dict())) for line in logs if line.action not in ['PING', 'NOTICE']]
