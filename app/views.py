@@ -13,6 +13,7 @@ bp = Blueprint('logs', __name__, url_prefix='/logviewer')
 url_re = compile(r'(https?:\/\/(?:www\.)?([^: \/]+\.[^: \/]+)(?::\d+)?\/?[^\" ]*)', IGNORECASE)
 
 
+@bp.route('/', methods=['GET'])
 @bp.route('/search', methods=['GET'])
 @login_required
 def search():
@@ -22,14 +23,11 @@ def search():
         abort(400, ex)
 
 
-@bp.route('/', defaults={'chan': None, 'date': None, 'time': None}, methods=['GET'])
-@bp.route('/<chan>', defaults={'date': None, 'time': None}, methods=['GET'])
 @bp.route('/<chan>/<date>', defaults={'time': None}, methods=['GET'])
 @bp.route('/<chan>/<date>/<time>', methods=['GET'])
 @login_required
 def index(chan, date, time):
     formats = {
-        #'PRIVMSG': u'{time} < {nick}> {msg}',
         'PRIVMSG': u'{time} < <span style="color: {color}">{nick}</span>> {msg}',
         'ACTION': u'{time} {msg}',
         'PART': u'{time} -!- {nick} [{user}] has left {chan} [{msg}]',
@@ -40,9 +38,6 @@ def index(chan, date, time):
         'QUIT': u'{time} -!- {nick} has quit IRC [{msg}]',
         'NICK': u'{time} -!- {nick} [{user}] is now known as {msg}',
     }
-
-    if not chan or not date:
-        return render_template('index.html', logs=[], ts=None)
 
     try:
         if date: datetime.strptime(date, "%Y-%m-%d")
