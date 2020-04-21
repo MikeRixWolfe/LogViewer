@@ -11,6 +11,7 @@ from app.util import color_hash
 bp = Blueprint('logs', __name__, url_prefix='/logviewer')
 
 url_re = compile(r'(https?:\/\/(?:www\.)?([^: \/]+\.[^: \/]+)(?::\d+)?\/?[^\" ]*)', IGNORECASE)
+irc_color_re = compile(r'(\x03(\d{1,2}(,\d{1,2})?)|[\x0f\x02\x16\x1f])')
 
 
 @bp.route('/', methods=['GET'])
@@ -40,6 +41,7 @@ def index(chan, date, time):
     }
 
     try:
+        chan = chan[:15]
         if date: datetime.strptime(date, "%Y-%m-%d")
         if time: datetime.strptime(time, "%H:%M:%S")
 
@@ -49,6 +51,7 @@ def index(chan, date, time):
 
         for line in logs:
             line.time = line.time[11:]
+            line.msg = irc_color_re.sub('', line.msg)
             line.msg = str(Markup.escape(line.msg.encode('ascii', 'ignore')))
             line.msg = url_re.sub(r'<a href="\1">\1</a>', line.msg)
 
