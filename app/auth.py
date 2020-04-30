@@ -18,7 +18,7 @@ def load_user(username):
 def login():
     if current_user.is_authenticated:
         flash('You are already logged in.', 'info')
-        return redirect(url_for('logs.index'))
+        return redirect(url_for('logs.search'))
 
     form = LoginForm()
 
@@ -30,7 +30,7 @@ def login():
 
         login_user(user, remember=form.remember_me.data)
         flash('You have successfully logged in!', 'success')
-        return redirect(request.args.get("next") or url_for('logs.index'))
+        return redirect(request.args.get("next") or url_for('logs.search'))
 
     #if form.errors:
     #    if isinstance(form.errors, dict):
@@ -42,7 +42,7 @@ def login():
 @bp.route('/signup', methods=['GET','POST'])
 def signup():
     if current_user.is_authenticated:
-        return redirect(url_for('logs.index'))
+        return redirect(url_for('logs.search'))
 
     form = SignupForm()
     if form.validate_on_submit():

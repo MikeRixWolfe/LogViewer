@@ -16,6 +16,9 @@ h1 {
     text-align: center;
 }
 
+i {
+    margin: 10px;
+}
 img {
     visibility: hidden;
 }
@@ -103,7 +106,9 @@ a {
 .navbar {
     background-color: rgb(39, 39, 39);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2);
-
+    position: sticky; 
+    top: 0;
+    z-index: 10;
 }
 
 .navbar-text {

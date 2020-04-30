@@ -13,7 +13,7 @@ login = LoginManager(app)
 login.login_view = 'auth.login'
 login.login_message_category = 'info'
 
-from app import auth, views
+from app import auth, errors, views
 app.register_blueprint(auth.bp)
 app.register_blueprint(views.bp)
 
