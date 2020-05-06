@@ -1,6 +1,7 @@
 body {
     max-width: 2000px;
     margin: auto;
+    margin-bottom: 30px;
     background: #1d1d1d;
     color: white;
 }
