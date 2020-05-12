@@ -34,7 +34,7 @@ def index(chan, date, time):
         'PART': u'{time} -!- {nick} [{user}] has left {chan} [{msg}]',
         'JOIN': u'{time} -!- {nick} [{user}] has joined {chan}',
         'MODE': u'{time} -!- mode/{chan} [{msg}] by {nick}',
-        'KICK': u'{time} -!- {nick} was kicked from {chan} by {msg}',
+        'KICK': u'{time} -!- {who} was kicked from {chan} by {nick} with reason {msg}',
         'TOPIC': u'{time} -!- {nick} changed the topic of {chan} to: {msg}',
         'QUIT': u'{time} -!- {nick} has quit IRC [{msg}]',
         'NICK': u'{time} -!- {nick} [{user}] is now known as {msg}',
@@ -49,14 +49,19 @@ def index(chan, date, time):
             .filter(db.text("logfts MATCH 'chan:\"#{}\" AND time:\"{}\"'".format(chan, date))) \
             .all()
 
-        for line in logs:
-            line.time = line.time[11:]
-            line.msg = irc_color_re.sub('', line.msg)
-            line.msg = str(Markup.escape(line.msg.encode('ascii', 'ignore')))
-            line.msg = url_re.sub(r'<a href="\1">\1</a>', line.msg)
+        logs = [line.to_dict() for line in logs]
 
-        logs = [Markup(formats[line.action].format(color=color_hash(line.nick),
-            **line.to_dict())) for line in logs if line.action not in ['PING', 'NOTICE']]
+        for line in logs:
+            line['time'] = line['time'][11:]
+            line['msg'] = irc_color_re.sub('', line['msg'])
+            line['msg'] = str(Markup.escape(line['msg'].encode('ascii', 'ignore')))
+            line['msg'] = url_re.sub(r'<a href="\1">\1</a>', line['msg'])
+
+            if line['action'] == 'KICK':
+                line['who'], line['msg'] = line['msg'].split(' ', 1)
+
+        logs = [Markup(formats[line['action']].format(color=color_hash(line['nick']),
+            **line)) for line in logs if line['action'] not in ['PING', 'NOTICE']]
 
         return render_template('index.html', logs=logs, ts=time)
     except Exception as ex:
