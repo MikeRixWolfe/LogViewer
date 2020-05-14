@@ -18,7 +18,8 @@ h1 {
 }
 
 i {
-    margin: 10px;
+    vertical-align: middle;
+    margin-top: -12px;
 }
 img {
     visibility: hidden;
@@ -26,6 +27,20 @@ img {
 
 a {
     font-style: normal;
+}
+
+td {
+  border-top: 1px solid white;
+  vertical-align: top;
+}
+
+th, td {
+    padding: 5px 10px;
+}
+
+.search-btn {
+    height: 31px;
+    margin: 0px 5px;
 }
 
 .text-center {
@@ -110,6 +125,7 @@ a {
     position: sticky; 
     top: 0;
     z-index: 10;
+    margin-bottom: 5px;
 }
 
 .navbar-text {

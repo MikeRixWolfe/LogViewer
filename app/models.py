@@ -28,6 +28,16 @@ class Log(db.Model, SerializableModel):
     uts = db.Column(db.Text, primary_key=True)
 
 
+class Quote(db.Model, SerializableModel):
+    __tablename__ = 'quotefts'
+
+    id = db.Column(db.Text, primary_key=True)
+    msg = db.Column(db.Text)
+    nick = db.Column(db.Text)
+    active = db.Column(db.Text)
+    uts = db.Column(db.Text)
+
+
 class User(UserMixin, db.Model):
     __tablename__ = 'User'
 

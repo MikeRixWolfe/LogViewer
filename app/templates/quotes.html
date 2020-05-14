@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+{% include 'nav.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <table class="w-100">
+                <thead>
+                    <th scope="col">#</th>
+                    <th scope="col">Quote</th>
+                    <th scope="col">Set By</th>
+                    <th scope="col">Date</th>
+                </thead>
+                <tbody>
+                    {% for quote in quotes %}
+                    <tr>
+                        <td style="white-space: nowrap;">{{ quote.id }}</td>
+                        <td style="word-break: break-word;">{{ quote.msg }}</td>
+                        <td style="white-space: nowrap;">{{ quote.nick }}</td>
+                        <td style="white-space: nowrap;">{{ quote.date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
