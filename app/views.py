@@ -40,7 +40,7 @@ def search():
         if form.validate_on_submit():
             logs = db.session.query(Log) \
                 .filter(db.text("logfts MATCH '{}'".format(build_query(form.search.data)))) \
-                .order_by(db.desc(db.cast(Log.uts, db.Integer))).limit(50).all()
+                .order_by(db.desc(db.cast(Log.uts, db.Float))).limit(50).all()
 
             logs = [line.to_dict() for line in logs]
 
