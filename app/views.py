@@ -39,14 +39,14 @@ def search():
 
         if form.validate_on_submit():
             logs = db.session.query(Log) \
-                .filter(db.text("logfts MATCH '{}'".format(build_query(form.search.data)))) \
-                .order_by(db.desc(db.cast(Log.uts, db.Float))).limit(50).all()
+                .filter(db.text("logfts MATCH '{}'".format(build_query(form.search.data.replace("'", "''").replace('"', '""'))))) \
+                .order_by(db.desc(db.cast(Log.uts, db.Float))).limit(100).all()
 
             logs = [line.to_dict() for line in logs]
 
             for line in logs:
                 line['link'] = '/logviewer/{}/{}/{}'.format(line['chan'].strip('#'), *line['time'].split())
-                line['time'] = line['time'][11:]
+                #line['time'] = line['time'][11:]
 
                 line['msg'] = irc_color_re.sub('', line['msg'])
                 line['msg'] = str(Markup.escape(line['msg'].encode('ascii', 'ignore')))
@@ -60,23 +60,6 @@ def search():
             logs = [line for line in logs if line['action'] not in ['PING', 'NOTICE']]
 
         return render_template('search.html', form=form, logs=logs, query=query)
-    except Exception as ex:
-        abort(400, ex)
-
-
-@bp.route('/quotes', methods=['get'])
-@login_required
-def quotes():
-    try:
-        quotes = db.session.query(Quote).filter(Quote.active == '1').all()
-        quotes = [quote.to_dict() for quote in quotes]
-
-        for quote in quotes:
-            quote['date'] = "{} {}".format(
-                "Early" if int(strftime("%d", localtime(float(quote['uts'])))) < 15 else "Late",
-                strftime("%b %Y", localtime(float(quote['uts']))))
-
-        return render_template('quotes.html', quotes=quotes)
     except Exception as ex:
         abort(400, ex)
 
@@ -110,6 +93,23 @@ def index(chan, date, time):
             **line)) for line in logs if line['action'] not in ['PING', 'NOTICE']]
 
         return render_template('index.html', logs=logs, ts=time)
+    except Exception as ex:
+        abort(400, ex)
+
+
+@bp.route('/quotes', methods=['GET'])
+@login_required
+def quotes():
+    try:
+        quotes = db.session.query(Quote).filter(Quote.active == '1').all()
+        quotes = [quote.to_dict() for quote in quotes]
+
+        for quote in quotes:
+            quote['date'] = "{} {}".format(
+                "Early" if int(strftime("%d", localtime(float(quote['uts'])))) < 15 else "Late",
+                strftime("%b %Y", localtime(float(quote['uts']))))
+
+        return render_template('quotes.html', quotes=quotes)
     except Exception as ex:
         abort(400, ex)
 
