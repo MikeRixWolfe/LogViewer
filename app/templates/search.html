@@ -7,7 +7,7 @@
 {% block content %}
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-12">
-			<form class="form-inline" action="" method="POST">
+			<form class="form-inline" action="" method="POST" autocomplete="off">
                 {{ form.hidden_tag() }}
                 {% if query %}
 				<input class="form-control form-control-sm ml-3" style="width: 85%;" type="text" name="search" placeholder="#channel @user +text to include -text to exclude" value="{{ query }}" aria-label="Search">
