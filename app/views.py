@@ -74,7 +74,7 @@ def index(chan, date, time):
         if time: datetime.strptime(time, "%H:%M:%S")
 
         logs = db.session.query(Log) \
-            .filter(db.text("logfts MATCH 'chan:\"#{}\" AND time:\"{}\"'".format(chan, date))) \
+            .filter(db.text("logfts MATCH '(chan:\"#{}\" OR chan:\"nick\" OR chan:\"quit\") AND time:\"{}\"'".format(chan, date))) \
             .all()
 
         logs = [line.to_dict() for line in logs]
