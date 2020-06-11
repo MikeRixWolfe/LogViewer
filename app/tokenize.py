@@ -29,8 +29,8 @@ def tokenize(text):
 
 
 def format(tokens):
-    chan = next(iter(['chan:"{}"'.format(t) for t in tokens['#']]), None)
-    nick = next(iter(['nick:"{}"'.format(t) for t in tokens['@']]), None)
+    chan = next(iter(['chan:^"{}"'.format(t) for t in tokens['#']]), None)
+    nick = next(iter(['nick:^"{}"'.format(t) for t in tokens['@']]), None)
 
     include = ' AND '.join(['msg:"{}"*'.format(t) for t in tokens['+']])
     exact = ' AND '.join(['msg:"{}"'.format(t) for t in tokens['=']])

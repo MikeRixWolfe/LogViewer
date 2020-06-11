@@ -42,11 +42,10 @@ def search():
                 .filter(db.text("logfts MATCH '{}'".format(build_query(form.search.data.replace("'", "''").replace('"', '""'))))) \
                 .order_by(db.desc(db.cast(Log.uts, db.Float))).limit(100).all()
 
-            logs = [line.to_dict() for line in logs]
-
             for line in logs:
+                line = line.to_dict()
+
                 line['link'] = '/logviewer/{}/{}/{}'.format(line['chan'].strip('#'), *line['time'].split())
-                #line['time'] = line['time'][11:]
 
                 line['msg'] = irc_color_re.sub('', line['msg'])
                 line['msg'] = str(Markup.escape(line['msg'].encode('ascii', 'ignore')))
