@@ -28,7 +28,7 @@ formats = {
 }
 
 
-@bp.route('/', methods=['GET'])
+@bp.route('/', methods=['GET', 'POST'])
 @bp.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
