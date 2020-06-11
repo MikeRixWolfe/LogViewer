@@ -42,9 +42,9 @@ def search():
                 .filter(db.text("logfts MATCH '{}'".format(build_query(form.search.data.replace("'", "''").replace('"', '""'))))) \
                 .order_by(db.desc(db.cast(Log.uts, db.Float))).limit(100).all()
 
-            for line in logs:
-                line = line.to_dict()
+            logs = [line.to_dict() for line in logs]\
 
+            for line in logs:
                 line['link'] = '/logviewer/{}/{}/{}'.format(line['chan'].strip('#'), *line['time'].split())
 
                 line['msg'] = irc_color_re.sub('', line['msg'])
@@ -101,6 +101,40 @@ def index(chan, date, time):
 def quotes():
     try:
         quotes = db.session.query(Quote).filter(Quote.active == '1').all()
+        quotes = [quote.to_dict() for quote in quotes]
+
+        for quote in quotes:
+            quote['date'] = "{} {}".format(
+                "Early" if int(strftime("%d", localtime(float(quote['uts'])))) < 15 else "Late",
+                strftime("%b %Y", localtime(float(quote['uts']))))
+
+        return render_template('quotes.html', quotes=quotes)
+    except Exception as ex:
+        abort(400, ex)
+
+
+@bp.route('/deleted_quotes', methods=['GET'])
+@login_required
+def deleted_quotes():
+    try:
+        quotes = db.session.query(Quote).filter(Quote.active == '0').all()
+        quotes = [quote.to_dict() for quote in quotes]
+
+        for quote in quotes:
+            quote['date'] = "{} {}".format(
+                "Early" if int(strftime("%d", localtime(float(quote['uts'])))) < 15 else "Late",
+                strftime("%b %Y", localtime(float(quote['uts']))))
+
+        return render_template('quotes.html', quotes=quotes)
+    except Exception as ex:
+        abort(400, ex)
+
+
+@bp.route('/all_quotes', methods=['GET'])
+@login_required
+def all_quotes():
+    try:
+        quotes = db.session.query(Quote).all()
         quotes = [quote.to_dict() for quote in quotes]
 
         for quote in quotes:
