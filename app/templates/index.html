@@ -22,13 +22,17 @@
 
 {% block footer %}
    <script>
+        jQuery.expr[':'].icontains = function(a, i, m) {
+            return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+        };
+
         $(window).on('load', function () {
 			if ('{{ts}}' !== 'None') {
-				$('html, body').animate({ scrollTop: $($('div.col-12:contains("{{ts}}")').filter(':contains("quote")')[0]).offset().top - $(window).height()/2}, 'fast');
+				$('html, body').animate({ scrollTop: $($('div.col-12:contains("{{ts}}")').filter(':icontains("quote")')[0]).offset().top - $(window).height()/2}, 'fast');
                 
                 var fspeed = 200;
                 for (i = 0; i <= 3; i++) {
-                    $($('div.col-12:contains("{{ts}}")').filter(':contains("quote")')[0]).fadeOut(fspeed).fadeIn(fspeed);
+                    $($('div.col-12:contains("{{ts}}")').filter(':icontains("quote")')[0]).fadeOut(fspeed).fadeIn(fspeed);
                   }
 			}
         });
