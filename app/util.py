@@ -1,6 +1,7 @@
 from flask import Markup
 from re import compile, sub, IGNORECASE
 from time import localtime, strftime
+
 from app import app
 
 
