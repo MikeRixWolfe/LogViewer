@@ -20,13 +20,14 @@ formats = {
 }
 
 
-def format_line(line):
+def format_line(line, date=False):
     line['link'] = '/logviewer/{}/{}/{}'.format(line['chan'].strip('#'), *line['time'].split())
-    line['time'] = line['time'][11:]
-
     line['msg'] = irc_color_re.sub('', line['msg'])
     line['msg'] = str(Markup.escape(line['msg'].encode('ascii', 'ignore')))
     line['msg'] = url_re.sub(r'<a href="\1">\1</a>', line['msg'])
+
+    if not date:
+        line['time'] = line['time'][11:]
 
     if line['action'] == 'KICK':
         line['who'], line['msg'] = line['msg'].split(' ', 1)

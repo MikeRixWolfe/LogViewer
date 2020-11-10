@@ -26,7 +26,7 @@ def search():
                 .filter(db.text("logfts MATCH '{}'".format(build_query(query.replace("'", "''").replace('"', '""'))))) \
                 .order_by(db.desc(db.cast(Log.uts, db.Float))).limit(100).all()
 
-            logs = [format_line(line.to_dict()) for line in logs
+            logs = [format_line(line.to_dict(), True) for line in logs
                 if line.action not in ['PING', 'NOTICE']]
 
         return render_template('search.html', form=form, logs=logs, query=query)
