@@ -6,7 +6,7 @@ from app import app, db
 from app.forms import SearchForm
 from app.models import Log, Quote
 from app.tokenize import build_query
-from app.util import color_hash, format_line, format_quote
+from app.util import format_line, format_quote
 
 
 bp = Blueprint('logs', __name__, url_prefix='/logviewer')
