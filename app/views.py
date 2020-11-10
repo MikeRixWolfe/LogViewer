@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import abort, redirect, render_template, url_for, Blueprint
+from flask import abort, render_template, request, Blueprint
 from flask_login import login_required
 
 from app import app, db
@@ -23,7 +23,7 @@ def search():
 
         if form.validate_on_submit():
             logs = db.session.query(Log) \
-                .filter(db.text("logfts MATCH '{}'".format(build_query(form.search.data.replace("'", "''").replace('"', '""'))))) \
+                .filter(db.text("logfts MATCH '{}'".format(build_query(query.replace("'", "''").replace('"', '""'))))) \
                 .order_by(db.desc(db.cast(Log.uts, db.Float))).limit(100).all()
 
             logs = [format_line(line.to_dict()) for line in logs
@@ -59,31 +59,14 @@ def index(chan, date, time):
 @login_required
 def quotes():
     try:
-        quotes = db.session.query(Quote).filter(Quote.active == '1').all()
-        quotes = [format_quote(quote.to_dict()) for quote in quotes]
+        page = request.args.get('page', None)
+        if page is None:
+            quotes = db.session.query(Quote).filter(Quote.active == '1').all()
+        elif page == 'all':
+            quotes = db.session.query(Quote).all()
+        elif page == 'deleted':
+            quotes = db.session.query(Quote).filter(Quote.active == '0').all()
 
-        return render_template('quotes.html', quotes=quotes)
-    except Exception as ex:
-        abort(400, ex)
-
-
-@bp.route('/deleted_quotes', methods=['GET'])
-@login_required
-def deleted_quotes():
-    try:
-        quotes = db.session.query(Quote).filter(Quote.active == '0').all()
-        quotes = [format_quote(quote.to_dict()) for quote in quotes]
-
-        return render_template('quotes.html', quotes=quotes)
-    except Exception as ex:
-        abort(400, ex)
-
-
-@bp.route('/all_quotes', methods=['GET'])
-@login_required
-def all_quotes():
-    try:
-        quotes = db.session.query(Quote).all()
         quotes = [format_quote(quote.to_dict()) for quote in quotes]
 
         return render_template('quotes.html', quotes=quotes)
