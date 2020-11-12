@@ -60,12 +60,12 @@ def index(chan, date, time):
 def quotes():
     try:
         page = request.args.get('page', None)
-        if page is None:
-            quotes = db.session.query(Quote).filter(Quote.active=='1').all()
-        elif page == 'all':
+        if page == 'all':
             quotes = db.session.query(Quote).all()
         elif page == 'deleted':
             quotes = db.session.query(Quote).filter(Quote.active=='0').all()
+        else:
+            quotes = db.session.query(Quote).filter(Quote.active=='1').all()
 
         quotes = [format_quote(quote.to_dict()) for quote in quotes]
 
