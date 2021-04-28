@@ -40,6 +40,8 @@ def search():
 def index(chan, date, time):
     try:
         chan = chan[:15]
+        if date: datetime.strptime(date, "%Y-%m-%d")
+        if time: datetime.strptime(time, "%H:%M:%S")
 
         logs = db.session.query(Log) \
             .filter(db.text("logfts MATCH '(chan:\"#{}\" OR chan:\"nick\" OR chan:\"quit\") AND time:\"{}\"'".format(chan, date))) \
