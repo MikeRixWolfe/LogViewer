@@ -7,12 +7,12 @@
 {% block content %}
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-12">
-			<form class="form-inline" action="" method="POST" autocomplete="off">
+			<form class="form-inline" action="" method="POST" autocomplete="off" style="margin-top: 10px">
                 {{ form.hidden_tag() }}
                 {% if query %}
-				<input class="form-control form-control-sm ml-3" style="width: 85%;" type="text" name="search" placeholder="#channel @user +text to include -text to exclude" value="{{ query }}" aria-label="Search">
+                <input class="form-control form-control-sm ml-3" style="width: 94%" type="text" name="search" placeholder="#channel @user +text to include -text to exclude" value="{{ query }}" aria-label="Search">
 				{% else %}
-                <input class="form-control form-control-sm ml-3" style="width: 85%;" type="text" name="search" placeholder="#channel @user +text to include -text to exclude" aria-label="Search">
+                <input class="form-control form-control-sm ml-3" style="width: 94%" type="text" name="search" placeholder="#channel @user +text to include -text to exclude" aria-label="Search">
 				{% endif %}
                 <button type=submit class="btn btn-primary search-btn"><i class="fas fa-search" aria-hidden="true"></i></button>
 
